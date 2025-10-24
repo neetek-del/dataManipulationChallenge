@@ -167,7 +167,7 @@ Now we'll work through each of the seven mental models using method chaining, st
 Let's start by calculating whether each shipment was late:
 
 ```{python}
-#| label: mental-model-1-assign
+#| label: Mental_Model_1
 #| echo: true
 
 # Simple assignment - calculate if shipment was late
@@ -196,12 +196,60 @@ print(shipments_with_lateness[['shipID', 'plannedShipDate', 'actualShipDate', 'i
 
 **Question 1: Data Types and Date Handling**
 - What is the `dtype` of the `actualShipDate` series? How can you find out using code?
+
+
+- Answer : The `dtype` of the `actualShipDate` series is `datetime64[ns]`.It represents dates and times with nanosecond precision. We can find out using below code by printing the dtype of the `actualShipDate` series.
+```{python}
+print(shipments_df['actualShipDate'].dtype)
+```
+
+
+
 - Why is it important that both `actualShipDate` and `plannedShipDate` have the same data type for comparison?
+
+- Answer : 
+
+Having the same data type for `actualShipDate` and `plannedShipDate` is crucial for accurate comparison. When dates are stored as datetime objects, Python can correctly compare them chronologically. For example, `datetime(2025, 11, 4)` is correctly identified as later than `datetime(2024, 5, 20)`. Unlike strings, numerical representations of dates and times inherently support chronological ordering, ensuring comparisons yield correct results.
+
+However, if dates are stored as strings with different formats (e.g., "04-11-2025" and "05-20-2024"), a simple string comparison might yield unintuitive results. Comparing "04-11-2025" and "05-20-2024" as strings would result in "04-11-2025" being considered "less than" "05-20-2024" because '04' comes before '05' alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.
+
+```{python}
+print(shipments_df['actualShipDate'].dtype)
+print(shipments_df['plannedShipDate'].dtype)
+```
+
+- Answer : We can find out using below code by printing the dtype of the `actualShipDate` and `plannedShipDate` series.
+```{python}
+print(shipments_df['actualShipDate'].dtype)
+print(shipments_df['plannedShipDate'].dtype)
+```
 
 **Question 2: String vs Date Comparison**
 - Can you give an example where comparing two dates as strings would yield unintuitive results, e.g. what happens if you try to compare "04-11-2025" and "05-20-2024" as strings vs as dates?
 
+- Answer : Comparing two dates as strings would yield unintuitive results, e.g. what happens if you try to compare "04-11-2025" and "05-20-2024" as strings vs as dates?
+from datetime import datetime
+
+```{python}
+date_string1 = "04-11-2025"
+date_string2 = "05-20-2024"
+
+# Comparing as strings
+print(f"Comparing '{date_string1}' and '{date_string2}' as strings:")
+print(f"'{date_string1}' < '{date_string2}': {date_string1 < date_string2}")
+
+# Converting to datetime objects and comparing
+date_datetime1 = datetime.strptime(date_string1, "%m-%d-%Y")
+date_datetime2 = datetime.strptime(date_string2, "%m-%d-%Y")
+
+print(f"\nComparing {date_datetime1} and {date_datetime2} as datetime objects:")
+print(f"{date_datetime1} < {date_datetime2}: {date_datetime1 < date_datetime2}")
+
+
+
 **Question 3: Debug This Code**
+
+
 ```python
 # This code has an error - can you spot it?
 shipments_with_lateness = (
@@ -209,12 +257,33 @@ shipments_with_lateness = (
     .assign(
         is_late=lambda df: df['actualShipDate'] > df['plannedShipDate'],
         days_late=lambda df: (df['actualShipDate'] - df['plannedShipDate']).dt.days,
-        lateStatement="Darn Shipment is Late" if shipments_df['is_late'] else "Shipment is on Time"
+        lateStatement=lambda df: df['is_late'].map({True: "Darn Shipment is Late", False: "Shipment is on Time"})
     )
 )
 ```
 What's wrong with the `lateStatement` assignment and how would you fix it?
 :::
+
+- Answer : The `lateStatement` assignment is wrong because the `is_late` column is a boolean series, not a single boolean value. We need to use the `all()` method to check if all values in the `is_late` column are True.
+
+```{python}   
+
+
+shipments_with_lateness = (
+    shipments_df
+    .assign(
+        is_late=lambda df: df['actualShipDate'] > df['plannedShipDate'],
+        days_late=lambda df: (df['actualShipDate'] - df['plannedShipDate']).dt.days,
+        lateStatement=lambda df: np.where(df['is_late'], "Darn Shipment is Late", "Shipment is on Time")
+    )
+)
+
+print("Added lateness calculations:")
+print(shipments_with_lateness[['shipID', 'plannedShipDate', 'actualShipDate', 'is_late', 'days_late', 'lateStatement']].head())
+```
+
+# Simple assignment - calculate if shipment was late
+
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
@@ -223,6 +292,7 @@ Adam's answers will be here.
 ### 2. Subset: Querying Rows and Filtering Columns
 
 **Mental Model:** Query rows based on conditions and filter to keep specific columns.
+
 
 Let's query for only late shipments and filter to keep the columns we need:
 
@@ -255,10 +325,31 @@ print(late_shipments.head())
 
 **Question 1: Query vs Boolean Indexing**
 - What's the difference between using `.query('is_late == True')` and `[df['is_late'] == True]`?
+
+- Answer : The difference between using `.query('is_late == True')` and `[df['is_late'] == True]` is that `.query()` is a more readable way to query rows based on conditions. It is more readable because it is a more natural way to express the condition.
+```{python}
+print(shipments_with_lateness.query('is_late == True'))
+print(shipments_with_lateness[shipments_with_lateness['is_late'] == True])
+```
+
+
+
 - Which approach is more readable and why?
+
+- Answer : The approach that is more readable is `.query('is_late == True')` because it is a more natural way to express the condition.
 
 **Question 2: Additional Row Querying**
 - Can you show an example of using a variable like `late_threshold` to query rows for shipments that are at least `late_threshold` days late, e.g. what if you wanted to query rows for shipments that are at least 5 days late?
+```{python}
+# Define a late threshold
+late_threshold = 5
+
+# Query for shipments that are at least the late_threshold days late
+late_shipments = shipments_with_lateness[shipments_with_lateness['days_late'] >= late_threshold]
+
+print(f"Shipments that are at least {late_threshold} days late:")
+print(late_shipments[['shipID', 'plannedShipDate', 'actualShipDate', 'days_late', 'lateStatement']].head())
+```
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
@@ -291,11 +382,46 @@ print("Remaining columns:", clean_shipments.columns.tolist())
 
 **Question 1: Drop vs Filter Strategies**
 - What's the difference between `.drop(columns=['quantity'])` and `.filter()` with a list of columns you want to keep?
+
+- Answer : The difference between `.drop(columns=['quantity'])` and `.filter()` with a list of columns you want to keep is that `.drop(columns=['quantity'])` drops the `quantity` column from the dataframe, while `.filter()` keeps the `quantity` column in the dataframe.
+```{python}
+print(clean_shipments.columns.tolist())
+print(clean_shipments.filter(['shipID', 'partID', 'plannedShipDate', 'actualShipDate', 'days_late']).columns.tolist())
+```
 - When would you choose to drop columns vs filter to keep specific columns?
 
 **Question 2: Handling Missing Data**
 - What happens if you use `.dropna()` without specifying `subset`? How is this different from `.dropna(subset=['plannedShipDate', 'actualShipDate'])`?
-- Why might you want to be selective about which columns to check for missing values?
+
+The pandas DataFrame.dropna() method is used to remove missing values (NaN) from a DataFrame. The behavior of this method changes significantly depending on whether the subset argument is used.
+
+When dropna() is called without the subset argument, it examines every cell in each row of the DataFrame. If any cell in a row contains a missing value, the entire row is removed from the DataFrame. This is the default behavior and can be a quick way to remove any incomplete data, but it can also lead to substantial data loss if missing values are present in columns that are not critical to the specific analysis being performed.
+
+.dropna() without specifying subset: This is like saying, "If any cell in a row is empty, get rid of the whole row." This can remove a lot of rows, even if only one cell in a row is empty and the other information in that row is useful.
+.dropna(subset=['plannedShipDate', 'actualShipDate']): This is like saying, "Only get rid of a row if a cell in the 'plannedShipDate' column or the 'actualShipDate' column is empty." If cells in other columns are empty, but these two date columns are filled, the row is kept.
+
+Code Example:
+```{python}
+import pandas as pd
+import numpy as np
+
+data = {'col1': [1, 2, np.nan, 4, 5],
+        'col2': [6, np.nan, 8, 9, 10],
+        'col3': [11, 12, 13, np.nan, 15]}
+df = pd.DataFrame(data)
+
+print("Original DataFrame:")
+print(df)
+
+# Using dropna() with subset, checking only 'col2' and 'col3'
+df_dropped_subset = df.dropna(subset=['col2', 'col3'])
+
+print("\nDataFrame after dropna() with subset=['col2', 'col3']:")
+print(df_dropped_subset)
+```
+    - Why might you want to be selective about which columns to check for missing values?
+
+- Answer : You might want to be selective about which columns to check for missing values because it can save time and memory. If you only need to check a few columns for missing values, you can do that instead of checking all columns.
 
 :::
 
@@ -329,11 +455,86 @@ print(sorted_by_lateness[['shipID', 'partID', 'days_late', 'is_late']].head(10))
 
 **Question 1: Sorting Strategies**
 - What's the difference between `ascending=False` and `ascending=True` in sorting?
+
+
+### `ascending=False` vs `ascending=True`
+
+When we use the `sort_values()` method in pandas to sort a DataFrame by one or more columns, the `ascending` parameter controls the order of the sorting:
+
+*   `ascending=True` (which is the default) sorts the values in ascending order (from smallest to largest, A to Z, oldest to newest).
+*   `ascending=False` sorts the values in descending order (from largest to smallest, Z to A, newest to oldest).
+
+
+
+
+
 - How would you sort by multiple columns (e.g., first by `is_late`, then by `days_late`)?
+
+### Sorting by Multiple Columns
+
+To sort by multiple columns, we provide a list of column names to the `by` argument in `sort_values()`. Pandas will then sort by the first column in the list, and for rows that have the same value in the first column, it will use the second column for sorting, and so on. We can also specify the sorting order (ascending or descending) for each column individually by providing a list of boolean values to the `ascending` argument, corresponding to the order of columns in the `by` list.
+
+### Sample 
+
+```{python}
+# Example 1: Sorting by days_late in ascending order
+print("Sorting by days_late (ascending):")
+sorted_ascending = shipments_with_lateness.sort_values(by='days_late', ascending=True)
+print(sorted_ascending[['shipID', 'days_late']].head())
+
+print("\n" + "="*50 + "\n")
+
+# Example 2: Sorting by days_late in descending order
+print("Sorting by days_late (descending):")
+sorted_descending = shipments_with_lateness.sort_values(by='days_late', ascending=False)
+print(sorted_descending[['shipID', 'days_late']].head())
+
+print("\n" + "="*50 + "\n")
+
+# Example 3: Sorting by multiple columns - first by is_late (False then True), then by days_late (ascending)
+# is_late is boolean, False comes before True in ascending order.
+print("Sorting by is_late (ascending), then by days_late (ascending):")
+sorted_multi = shipments_with_lateness.sort_values(by=['is_late', 'days_late'], ascending=[True, True])
+print(sorted_multi[['shipID', 'is_late', 'days_late', 'lateStatement']].head(10))
+
+```
+
+
+
 
 **Question 2: Index Management**
 - Why do we use `.reset_index(drop=True)` after sorting?
+
+
+Answer :When we sort a DataFrame, the original index of the rows stays attached to those rows. This means that even though the rows are now in a new order, their original index values are still associated with them.
+
+Using .reset_index(drop=True) does two things:
+
+reset_index(): It replaces the current index with a default integer index starting from 0.
+drop=True: This is crucial. If we didn't include drop=True, the original index would be added as a new column in the DataFrame. By setting drop=True, we tell pandas to discard the original index instead of turning it into a column.
+Why do this after sorting?
+
+Clean Integer Index: Sorting changes the order of the rows, but the original index doesn't reflect this new order. Resetting the index provides a clean, sequential integer index (0, 1, 2, ...) that matches the new order of the rows. This is often more intuitive and easier to work with, especially if you plan to do further operations that rely on positional indexing.
+Avoiding Confusion: Keeping the old index after sorting can be confusing. For example, if you sort a DataFrame and then try to access a row using its original index value, you might not get the row you expect in the new sorted order.
+Preparation for Further Operations: Some pandas operations work best with a standard integer index. Resetting the index after sorting ensures the DataFrame is in a good state for these operations.
+
+
+
 - What happens to the original index when you sort? Why might this be problematic?
+
+Answer
+
+The original index values move along with the data rows they were associated with. The order of the index values will no longer be sequential (0, 1, 2, ...) if it was before, but instead will reflect the original positions of the rows in the unsorted DataFrame.
+
+Why might this be problematic?
+
+Keeping the original index after sorting can be problematic for a few reasons:
+
+Mismatch between Position and Index Label: The most common issue is that the index label no longer corresponds to the position of the row in the sorted DataFrame. If you try to access a row using its original index label (e.g., using .loc[]), you will get the data from the row that originally had that index, which might now be located at a completely different position in the sorted DataFrame.
+Confusion with Positional Indexing: If you're used to using default integer-based positional indexing (e.g., using .iloc[0] to get the first row), this will still work, but the index label displayed for that row will be the original index label, which can be confusing as it doesn't reflect its current position.
+Unexpected Behavior in Subsequent Operations: Some pandas operations assume or work best with a standard, sequential integer index. If you perform these operations on a sorted DataFrame with a non-sequential original index, you might encounter unexpected behavior or errors.
+Difficulty in Slicing by Label: If your original index was meaningful (e.g., timestamps or IDs), sorting disrupts the sequential nature of that index. This can make it harder to perform operations that rely on sequential index slicing or range selection using .loc[].
+
 
 :::
 
@@ -375,6 +576,8 @@ print(f"\nOn-time delivery rate: {on_time_rate:.1f}%")
 **Question 1: Boolean Aggregation**
 - Why does `sum()` work on boolean values? What does it count?
 
+Answer : The `sum()` function works on boolean values by counting the number of True values in the boolean series. It counts the number of True values in the boolean series.
+
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
@@ -408,7 +611,9 @@ print(shipments_with_category['prodCategory'].value_counts())
 ## 🤔 Discussion Questions: Merge Mental Model
 
 **Question 1: Join Types and Data Loss**
-- Why does your professor think we should use `how='left'` in most cases? 
+- Why does your professor think we should use `how='left'` in most cases?
+
+
 - How can you check if any shipments were lost during the merge?
 
 **Question 2: Key Column Matching**

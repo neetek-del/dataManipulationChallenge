@@ -244,7 +244,7 @@ date_datetime2 = datetime.strptime(date_string2, "%m-%d-%Y")
 
 print(f"\nComparing {date_datetime1} and {date_datetime2} as datetime objects:")
 print(f"{date_datetime1} < {date_datetime2}: {date_datetime1 < date_datetime2}")
-
+```
 
 
 **Question 3: Debug This Code**

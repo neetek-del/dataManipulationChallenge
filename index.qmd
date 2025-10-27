@@ -194,6 +194,12 @@ print(shipments_with_lateness[['shipID', 'plannedShipDate', 'actualShipDate', 'i
 ## 🤔 Discussion Questions: Assign Mental Model
 
 **Question 1: Data Types and Date Handling**
+
+# Simple assignment - calculate if shipment was late
+
+
+#### Briefly Give Answers to the Discussion Questions In This Section
+
 - What is the `dtype` of the `actualShipDate` series? How can you find out using code?
 
 
@@ -206,16 +212,16 @@ print(shipments_df['actualShipDate'].dtype)
 
 - Why is it important that both `actualShipDate` and `plannedShipDate` have the same data type for comparison?
 
-- Answer : 
-
-Having the same data type for `actualShipDate` and `plannedShipDate` is crucial for accurate comparison. When dates are stored as datetime objects, Python can correctly compare them chronologically. For example, `datetime(2025, 11, 4)` is correctly identified as later than `datetime(2024, 5, 20)`. Unlike strings, numerical representations of dates and times inherently support chronological ordering, ensuring comparisons yield correct results.
-
-However, if dates are stored as strings with different formats (e.g., "04-11-2025" and "05-20-2024"), a simple string comparison might yield unintuitive results. Comparing "04-11-2025" and "05-20-2024" as strings would result in "04-11-2025" being considered "less than" "05-20-2024" because '04' comes before '05' alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.
 
 ```{python}
 print(shipments_df['actualShipDate'].dtype)
 print(shipments_df['plannedShipDate'].dtype)
 ```
+- Answer : 
+
+Having the same data type for `actualShipDate` and `plannedShipDate` is crucial for accurate comparison. When dates are stored as datetime objects, Python can correctly compare them chronologically. For example, `datetime(2025, 11, 4)` is correctly identified as later than `datetime(2024, 5, 20)`. Unlike strings, numerical representations of dates and times inherently support chronological ordering, ensuring comparisons yield correct results.
+
+However, if dates are stored as strings with different formats (e.g., "04-11-2025" and "05-20-2024"), a simple string comparison might yield unintuitive results. Comparing "04-11-2025" and "05-20-2024" as strings would result in "04-11-2025" being considered "less than" "05-20-2024" because '04' comes before '05' alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.
 
 - Answer : We can find out using below code by printing the dtype of the `actualShipDate` and `plannedShipDate` series.
 ```{python}
@@ -281,12 +287,6 @@ print("Added lateness calculations:")
 print(shipments_with_lateness[['shipID', 'plannedShipDate', 'actualShipDate', 'is_late', 'days_late', 'lateStatement']].head())
 ```
 
-# Simple assignment - calculate if shipment was late
-
-
-#### Briefly Give Answers to the Discussion Questions In This Section
-
-Adam's answers will be here.
 
 ### 2. Subset: Querying Rows and Filtering Columns
 

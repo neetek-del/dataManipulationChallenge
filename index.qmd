@@ -3,7 +3,6 @@ title: "Data Manipulation Challenge"
 subtitle: "A Mental Model for Method Chaining in Pandas"
 format:
   html: default
-  pdf: default
 execute:
   echo: true
   eval: true

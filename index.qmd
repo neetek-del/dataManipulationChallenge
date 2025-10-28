@@ -686,18 +686,21 @@ print(service_by_category)
 **Question 1: GroupBy Mechanics**
 - What does `.groupby('prodCategory')` actually do? How does it "split" the data?
 
-Answer
+Answer:
+
 .groupby('prodCategory') divides your dataset into separate groups based on each unique product category. This “splits” the data so that operations (like counting, summing, or averaging) can be applied to each group independently. After grouping, you can use functions such as .agg() or .mean() to summarize each group.
 
 - Why do we need to use `.agg()` after grouping? What happens if you don't?
 
-Amswer
+Amswer:
+
 .agg() is used to perform calculations or summaries (like sum, mean, or count) on each group created by .groupby(). If you don’t use .agg() or another aggregation function, you only have the grouped structure — meaning the data is split into groups but no actual computation or summary is done yet.
 
 **Question 2: Multi-Level Grouping**
 - Explore grouping by `['shipID', 'prodCategory']`?  What question does this answer versus grouping by `'prodCategory'` alone?  (HINT: There may be many rows with identical shipID's due to a particular order having multiple partID's.)
 
-Answer
+Answer:
+
 Grouping by ['shipID', 'prodCategory'] allows us to analyze the service level (lateness) for each specific product category within each individual shipment. This provides a detailed view of lateness for parts of a single order. In contrast, grouping by 'prodCategory' alone gives the overall service level for each product category across all shipments combined, summarizing the performance of categories irrespective of individual orders.
 
 ```{python}
@@ -757,12 +760,15 @@ print(f"Percentage with multiple categories: {multi_category_shipments['shipID']
 
 **Question 1: Business Question Analysis**
 - What business question does this comprehensive analysis answer?
-Answer
+
+Answer:
+
 The comprehensive analysis performed by grouping by ['shipID', 'prodCategory'] and then checking for shipments with multiple categories (in cell daFw4jeqHAcS) primarily answers the question: "What is the proportion of our shipments that contain items from more than one product category, and how might this complexity relate to lateness?" It helps understand the operational complexity introduced by orders with diverse product mixes.
 
 - How does grouping by `['shipID', 'prodCategory']` differ from grouping by just `'prodCategory'`?
 
-Answer
+Answer:
+
 Grouping by 'prodCategory' alone gives us an overall view of lateness performance for each product category across all shipments. It tells us, for example, what percentage of all 'Machines' shipments were late.
 
 Grouping by ['shipID', 'prodCategory'], on the other hand, provides a more granular view. It allows us to see the lateness status for each specific product category within each individual shipment. This is important because a single order (shipID) can contain items from multiple product categories. This multi-level grouping lets us investigate if, for a particular order, one category of items arrived late while another arrived on time, or if the entire order was delayed due to one specific category.
@@ -816,7 +822,8 @@ In essence, the percentage of multi-category shipments is a metric that highligh
 - Do not `echo` the code that creates the visualizations
 
 
-Answer
+Answer:
+
 The bar plot titled "On-Time Percentage by Product Category" visually represents the proportion of shipments that arrived on or before their planned date, broken down by the product category of the items in the shipment. Each bar corresponds to a product category, and its height indicates the percentage of on-time shipments for that category. This allows for a quick comparison of service levels across different product lines, highlighting which categories have the best or worst on-time performance.
 
 

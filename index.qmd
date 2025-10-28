@@ -203,11 +203,12 @@ print(shipments_with_lateness[['shipID', 'plannedShipDate', 'actualShipDate', 'i
 - What is the `dtype` of the `actualShipDate` series? How can you find out using code?
 
 
-- Answer : The `dtype` of the `actualShipDate` series is `datetime64[ns]`.It represents dates and times with nanosecond precision. We can find out using below code by printing the dtype of the `actualShipDate` series.
+- Answer :
+
+ The `dtype` of the `actualShipDate` series is `datetime64[ns]`.It represents dates and times with nanosecond precision. We can find out using below code by printing the dtype of the `actualShipDate` series.
 ```{python}
 print(shipments_df['actualShipDate'].dtype)
 ```
-
 
 
 - Why is it important that both `actualShipDate` and `plannedShipDate` have the same data type for comparison?
@@ -223,7 +224,9 @@ Having the same data type for `actualShipDate` and `plannedShipDate` is crucial 
 
 However, if dates are stored as strings with different formats (e.g., "04-11-2025" and "05-20-2024"), a simple string comparison might yield unintuitive results. Comparing "04-11-2025" and "05-20-2024" as strings would result in "04-11-2025" being considered "less than" "05-20-2024" because '04' comes before '05' alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.
 
-- Answer : We can find out using below code by printing the dtype of the `actualShipDate` and `plannedShipDate` series.
+- Answer:
+
+ We can find out using below code by printing the dtype of the `actualShipDate` and `plannedShipDate` series.
 ```{python}
 print(shipments_df['actualShipDate'].dtype)
 print(shipments_df['plannedShipDate'].dtype)
@@ -232,7 +235,9 @@ print(shipments_df['plannedShipDate'].dtype)
 **Question 2: String vs Date Comparison**
 - Can you give an example where comparing two dates as strings would yield unintuitive results, e.g. what happens if you try to compare "04-11-2025" and "05-20-2024" as strings vs as dates?
 
-- Answer : Comparing two dates as strings would yield unintuitive results, e.g. what happens if you try to compare "04-11-2025" and "05-20-2024" as strings vs as dates?
+- Answer:
+
+ Comparing two dates as strings would yield unintuitive results, e.g. what happens if you try to compare "04-11-2025" and "05-20-2024" as strings vs as dates?
 from datetime import datetime
 
 ```{python}
@@ -254,7 +259,6 @@ print(f"{date_datetime1} < {date_datetime2}: {date_datetime1 < date_datetime2}")
 
 **Question 3: Debug This Code**
 
-
 ```python
 # This code has an error - can you spot it?
 shipments_with_lateness = (
@@ -269,7 +273,9 @@ shipments_with_lateness = (
 What's wrong with the `lateStatement` assignment and how would you fix it?
 :::
 
-- Answer : The `lateStatement` assignment is wrong because the `is_late` column is a boolean series, not a single boolean value. We need to use the `all()` method to check if all values in the `is_late` column are True.
+- Answer:
+
+ The `lateStatement` assignment is wrong because the `is_late` column is a boolean series, not a single boolean value. We need to use the `all()` method to check if all values in the `is_late` column are True.
 
 ```{python}   
 
@@ -322,23 +328,31 @@ print(late_shipments.head())
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Subset Mental Model
 
+
+:::
+
+#### Briefly Give Answers to the Discussion Questions In This Section
+
 **Question 1: Query vs Boolean Indexing**
 - What's the difference between using `.query('is_late == True')` and `[df['is_late'] == True]`?
 
-- Answer : The difference between using `.query('is_late == True')` and `[df['is_late'] == True]` is that `.query()` is a more readable way to query rows based on conditions. It is more readable because it is a more natural way to express the condition.
+- Answer: 
+
+The difference between using `.query('is_late == True')` and `[df['is_late'] == True]` is that `.query()` is a more readable way to query rows based on conditions. It is more readable because it is a more natural way to express the condition.
 ```{python}
 print(shipments_with_lateness.query('is_late == True'))
 print(shipments_with_lateness[shipments_with_lateness['is_late'] == True])
 ```
 
-
-
 - Which approach is more readable and why?
 
-- Answer : The approach that is more readable is `.query('is_late == True')` because it is a more natural way to express the condition.
+- Answer:
+
+The approach that is more readable is `.query('is_late == True')` because it is a more natural way to express the condition.
 
 **Question 2: Additional Row Querying**
 - Can you show an example of using a variable like `late_threshold` to query rows for shipments that are at least `late_threshold` days late, e.g. what if you wanted to query rows for shipments that are at least 5 days late?
+
 ```{python}
 # Define a late threshold
 late_threshold = 5
@@ -349,11 +363,6 @@ late_shipments = shipments_with_lateness[shipments_with_lateness['days_late'] >=
 print(f"Shipments that are at least {late_threshold} days late:")
 print(late_shipments[['shipID', 'plannedShipDate', 'actualShipDate', 'days_late', 'lateStatement']].head())
 ```
-:::
-
-#### Briefly Give Answers to the Discussion Questions In This Section
-
-> Replace this with your answers to the discussion questions
 
 ### 3. Drop: Removing Unwanted Data
 
@@ -379,10 +388,17 @@ print("Remaining columns:", clean_shipments.columns.tolist())
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Drop Mental Model
 
+
+:::
+
+#### Briefly Give Answers to the Discussion Questions In This Section
+
 **Question 1: Drop vs Filter Strategies**
 - What's the difference between `.drop(columns=['quantity'])` and `.filter()` with a list of columns you want to keep?
 
-- Answer : The difference between `.drop(columns=['quantity'])` and `.filter()` with a list of columns you want to keep is that `.drop(columns=['quantity'])` drops the `quantity` column from the dataframe, while `.filter()` keeps the `quantity` column in the dataframe.
+- Answer: 
+
+The difference between `.drop(columns=['quantity'])` and `.filter()` with a list of columns you want to keep is that `.drop(columns=['quantity'])` drops the `quantity` column from the dataframe, while `.filter()` keeps the `quantity` column in the dataframe.
 ```{python}
 print(clean_shipments.columns.tolist())
 print(clean_shipments.filter(['shipID', 'partID', 'plannedShipDate', 'actualShipDate', 'days_late']).columns.tolist())
@@ -392,11 +408,14 @@ print(clean_shipments.filter(['shipID', 'partID', 'plannedShipDate', 'actualShip
 **Question 2: Handling Missing Data**
 - What happens if you use `.dropna()` without specifying `subset`? How is this different from `.dropna(subset=['plannedShipDate', 'actualShipDate'])`?
 
+Answer:
+
 The pandas DataFrame.dropna() method is used to remove missing values (NaN) from a DataFrame. The behavior of this method changes significantly depending on whether the subset argument is used.
 
 When dropna() is called without the subset argument, it examines every cell in each row of the DataFrame. If any cell in a row contains a missing value, the entire row is removed from the DataFrame. This is the default behavior and can be a quick way to remove any incomplete data, but it can also lead to substantial data loss if missing values are present in columns that are not critical to the specific analysis being performed.
 
 .dropna() without specifying subset: This is like saying, "If any cell in a row is empty, get rid of the whole row." This can remove a lot of rows, even if only one cell in a row is empty and the other information in that row is useful.
+
 .dropna(subset=['plannedShipDate', 'actualShipDate']): This is like saying, "Only get rid of a row if a cell in the 'plannedShipDate' column or the 'actualShipDate' column is empty." If cells in other columns are empty, but these two date columns are filled, the row is kept.
 
 Code Example:
@@ -420,13 +439,9 @@ print(df_dropped_subset)
 ```
     - Why might you want to be selective about which columns to check for missing values?
 
-- Answer : You might want to be selective about which columns to check for missing values because it can save time and memory. If you only need to check a few columns for missing values, you can do that instead of checking all columns.
+- Answer:
 
-:::
-
-#### Briefly Give Answers to the Discussion Questions In This Section
-
-> Replace this with your answers to the discussion questions
+ We might want to be selective about which columns to check for missing values because it can save time and memory. If we only need to check a few columns for missing values, we can do that instead of checking all columns.
 
 ### 4. Sort: Arranging Data
 
@@ -452,10 +467,15 @@ print(sorted_by_lateness[['shipID', 'partID', 'days_late', 'is_late']].head(10))
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Sort Mental Model
 
+
+:::
+
+#### Briefly Give Answers to the Discussion Questions In This Section
+
 **Question 1: Sorting Strategies**
 - What's the difference between `ascending=False` and `ascending=True` in sorting?
 
-
+Answer:
 ### `ascending=False` vs `ascending=True`
 
 When we use the `sort_values()` method in pandas to sort a DataFrame by one or more columns, the `ascending` parameter controls the order of the sorting:
@@ -463,17 +483,14 @@ When we use the `sort_values()` method in pandas to sort a DataFrame by one or m
 *   `ascending=True` (which is the default) sorts the values in ascending order (from smallest to largest, A to Z, oldest to newest).
 *   `ascending=False` sorts the values in descending order (from largest to smallest, Z to A, newest to oldest).
 
-
-
-
-
 - How would you sort by multiple columns (e.g., first by `is_late`, then by `days_late`)?
 
+Answer:
 ### Sorting by Multiple Columns
 
 To sort by multiple columns, we provide a list of column names to the `by` argument in `sort_values()`. Pandas will then sort by the first column in the list, and for rows that have the same value in the first column, it will use the second column for sorting, and so on. We can also specify the sorting order (ascending or descending) for each column individually by providing a list of boolean values to the `ascending` argument, corresponding to the order of columns in the `by` list.
 
-### Sample 
+### Sample Code
 
 ```{python}
 # Example 1: Sorting by days_late in ascending order
@@ -505,7 +522,9 @@ print(sorted_multi[['shipID', 'is_late', 'days_late', 'lateStatement']].head(10)
 - Why do we use `.reset_index(drop=True)` after sorting?
 
 
-Answer :When we sort a DataFrame, the original index of the rows stays attached to those rows. This means that even though the rows are now in a new order, their original index values are still associated with them.
+Answer:
+
+When we sort a DataFrame, the original index of the rows stays attached to those rows. This means that even though the rows are now in a new order, their original index values are still associated with them.
 
 Using .reset_index(drop=True) does two things:
 
@@ -521,11 +540,13 @@ Preparation for Further Operations: Some pandas operations work best with a stan
 
 - What happens to the original index when you sort? Why might this be problematic?
 
-Answer
+Answer:
 
 The original index values move along with the data rows they were associated with. The order of the index values will no longer be sequential (0, 1, 2, ...) if it was before, but instead will reflect the original positions of the rows in the unsorted DataFrame.
 
 Why might this be problematic?
+
+Answer:
 
 Keeping the original index after sorting can be problematic for a few reasons:
 
@@ -535,11 +556,6 @@ Unexpected Behavior in Subsequent Operations: Some pandas operations assume or w
 Difficulty in Slicing by Label: If your original index was meaningful (e.g., timestamps or IDs), sorting disrupts the sequential nature of that index. This can make it harder to perform operations that rely on sequential index slicing or range selection using .loc[].
 
 
-:::
-
-#### Briefly Give Answers to the Discussion Questions In This Section
-
-> Replace this with your answers to the discussion questions
 
 ### 5. Aggregate: Summarizing Data
 
@@ -572,16 +588,16 @@ print(f"\nOn-time delivery rate: {on_time_rate:.1f}%")
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Aggregate Mental Model
 
-**Question 1: Boolean Aggregation**
-- Why does `sum()` work on boolean values? What does it count?
-
-Answer : The `sum()` function works on boolean values by counting the number of True values in the boolean series. It counts the number of True values in the boolean series.
 
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+**Question 1: Boolean Aggregation**
+- Why does `sum()` work on boolean values? What does it count?
+
+Answer : The `sum()` function works on boolean values by counting the number of True values in the boolean series. It counts the number of True values in the boolean series.
+
 
 ### 6. Merge: Combining Information
 
@@ -612,17 +628,26 @@ print(shipments_with_category['prodCategory'].value_counts())
 **Question 1: Join Types and Data Loss**
 - Why does your professor think we should use `how='left'` in most cases?
 
-
-- How can you check if any shipments were lost during the merge?
-
-**Question 2: Key Column Matching**
-- What happens if there are duplicate `partID` values in the `product_line_df`?
-
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+
+Answer:
+Professor likely recommends using how='left' in most cases because a left join keeps all the rows from your main (left) dataset while only adding matching information from the other (right) dataset. This approach ensures that no data from your primary source is accidentally lost if there are missing matches in the secondary table. It prioritizes preserving the original observations and helps in identifying which primary records lack corresponding details in the secondary data source.
+
+- How can you check if any shipments were lost during the merge?
+
+Answer:
+To check if any shipments were lost during the merge, we can compare the number of rows in the DataFrame before the merge (shipments_with_lateness) with the number of rows in the DataFrame after the merge (shipments_with_category).
+
+Since we performed a left merge with shipments_with_lateness as the left DataFrame, the number of rows should remain the same. If the row count decreases, it would indicate an issue (which shouldn't happen with a left merge unless the left DataFrame itself had duplicate keys that were somehow collapsed, which is not typical behavior). If the row count increases, it would suggest duplicate keys in the right DataFrame.
+
+**Question 2: Key Column Matching**
+- What happens if there are duplicate `partID` values in the `product_line_df`?
+
+Answer:
+If there are duplicate partID values in the product_line_df (the right DataFrame in our merge), the merge operation will create a new row in the resulting DataFrame for every match found. This means if a single shipment in the left DataFrame has a partID that appears multiple times in the product_line_df, that shipment will be represented by multiple rows in the merged DataFrame, each with the different information associated with the duplicate partID entries. This increases the number of rows in the merged DataFrame and usually signals that there are duplicate key issues in the lookup table (product_line_df) that should be addressed.
 
 ### 7. Split-Apply-Combine: Group Analysis
 
@@ -652,17 +677,45 @@ print(service_by_category)
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Split-Apply-Combine Mental Model
 
-**Question 1: GroupBy Mechanics**
-- What does `.groupby('prodCategory')` actually do? How does it "split" the data?
-- Why do we need to use `.agg()` after grouping? What happens if you don't?
 
-**Question 2: Multi-Level Grouping**
-- Explore grouping by `['shipID', 'prodCategory']`?  What question does this answer versus grouping by `'prodCategory'` alone?  (HINT: There may be many rows with identical shipID's due to a particular order having multiple partID's.)
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+
+**Question 1: GroupBy Mechanics**
+- What does `.groupby('prodCategory')` actually do? How does it "split" the data?
+
+Answer
+.groupby('prodCategory') divides your dataset into separate groups based on each unique product category. This “splits” the data so that operations (like counting, summing, or averaging) can be applied to each group independently. After grouping, you can use functions such as .agg() or .mean() to summarize each group.
+
+- Why do we need to use `.agg()` after grouping? What happens if you don't?
+
+Amswer
+.agg() is used to perform calculations or summaries (like sum, mean, or count) on each group created by .groupby(). If you don’t use .agg() or another aggregation function, you only have the grouped structure — meaning the data is split into groups but no actual computation or summary is done yet.
+
+**Question 2: Multi-Level Grouping**
+- Explore grouping by `['shipID', 'prodCategory']`?  What question does this answer versus grouping by `'prodCategory'` alone?  (HINT: There may be many rows with identical shipID's due to a particular order having multiple partID's.)
+
+Answer
+Grouping by ['shipID', 'prodCategory'] allows us to analyze the service level (lateness) for each specific product category within each individual shipment. This provides a detailed view of lateness for parts of a single order. In contrast, grouping by 'prodCategory' alone gives the overall service level for each product category across all shipments combined, summarizing the performance of categories irrespective of individual orders.
+
+```{python}
+# Group by shipID and prodCategory, then aggregate
+service_by_shipment_category = (
+    shipments_with_category
+    .groupby(['shipID', 'prodCategory'])  # Group by both shipID and prodCategory
+    .agg({
+        'is_late': ['any', 'count', 'sum', 'mean'],  # Count, late count, percentage late for each group
+        'days_late': ['mean', 'max']  # Average and max days late for each group
+    })
+    .round(3)
+)
+
+print("Service Level by Shipment and Product Category:")
+print(service_by_shipment_category.head(10))
+```
+
 
 ## Answering A Business Question
 
@@ -698,15 +751,32 @@ print(f"Percentage with multiple categories: {multi_category_shipments['shipID']
 ::: {.callout-important}
 ## 🤔 Discussion Questions: Answering A Business Question
 
-**Question 1: Business Question Analysis**
-- What business question does this comprehensive analysis answer?
-- How does grouping by `['shipID', 'prodCategory']` differ from grouping by just `'prodCategory'`?
-- What insights can ZappTech's management gain from knowing the percentage of multi-category shipments?
 :::
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+**Question 1: Business Question Analysis**
+- What business question does this comprehensive analysis answer?
+Answer
+The comprehensive analysis performed by grouping by ['shipID', 'prodCategory'] and then checking for shipments with multiple categories (in cell daFw4jeqHAcS) primarily answers the question: "What is the proportion of our shipments that contain items from more than one product category, and how might this complexity relate to lateness?" It helps understand the operational complexity introduced by orders with diverse product mixes.
+
+- How does grouping by `['shipID', 'prodCategory']` differ from grouping by just `'prodCategory'`?
+
+Answer
+Grouping by 'prodCategory' alone gives us an overall view of lateness performance for each product category across all shipments. It tells us, for example, what percentage of all 'Machines' shipments were late.
+
+Grouping by ['shipID', 'prodCategory'], on the other hand, provides a more granular view. It allows us to see the lateness status for each specific product category within each individual shipment. This is important because a single order (shipID) can contain items from multiple product categories. This multi-level grouping lets us investigate if, for a particular order, one category of items arrived late while another arrived on time, or if the entire order was delayed due to one specific category.
+
+- What insights can ZappTech's management gain from knowing the percentage of multi-category shipments?
+
+Knowing the percentage of multi-category shipments can provide ZappTech's management with several key insights:
+
+1.Operational Complexity: A higher percentage of multi-category shipments suggests greater complexity in warehousing, picking, packing, and logistics. Handling orders with items from different storage locations or requiring different packaging can increase the chances of errors or delays.
+2.Potential for Lateness: If multi-category shipments are more prone to lateness (an analysis that could be done by comparing the lateness rates of single-category vs. multi-category shipments), management might need to investigate the processes involved in fulfilling these complex orders.
+3.Resource Allocation: Understanding the volume of multi-category orders can help in allocating resources (staff, warehouse space, etc.) effectively to manage this complexity.
+4.Order Fulfillment Strategy: This insight can inform decisions about order fulfillment strategies. For instance, should multi-category orders be processed differently? Should items from different categories in the same order be shipped separately?
+5.Customer Experience: Delays in multi-category shipments can negatively impact customer satisfaction. Identifying the frequency of such shipments is the first step in addressing potential customer experience issues.
+In essence, the percentage of multi-category shipments is a metric that highlights a specific type of operational challenge and can be a starting point for investigating potential bottlenecks or causes of lateness in more complex orders.
 
 ## Student Analysis Section: Mastering Data Manipulation {#student-analysis-section}
 
@@ -744,6 +814,45 @@ print(f"Percentage with multiple categories: {multi_category_shipments['shipID']
 - Support the insights from your discussion questions
 - Be appropriate for a business audience
 - Do not `echo` the code that creates the visualizations
+
+
+Answer
+The bar plot titled "On-Time Percentage by Product Category" visually represents the proportion of shipments that arrived on or before their planned date, broken down by the product category of the items in the shipment. Each bar corresponds to a product category, and its height indicates the percentage of on-time shipments for that category. This allows for a quick comparison of service levels across different product lines, highlighting which categories have the best or worst on-time performance.
+
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Calculate on-time percentage (1 - mean of is_late)
+# Ensure we are accessing the correct column from the aggregated DataFrame
+service_by_category[('on_time_percentage', '')] = 1 - service_by_category[('is_late', 'mean')]
+
+# Sort by on-time percentage for better visualization
+service_by_category_sorted = service_by_category.sort_values(by=('on_time_percentage', ''), ascending=False)
+
+# Create the bar plot
+plt.figure(figsize=(10, 6))
+sns.barplot(x=service_by_category_sorted.index, y=service_by_category_sorted[('on_time_percentage', '')])
+
+# Add labels and title
+plt.xlabel("Product Category")
+plt.ylabel("On-Time Percentage")
+plt.title("On-Time Percentage by Product Category")
+plt.ylim(0, 1) # Set y-axis limit from 0 to 1 for percentage
+
+# Format y-axis labels as percentages
+plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: '{:.0%}'.format(y)))
+
+# Add on-time percentage values on top of the bars
+for index, row in service_by_category_sorted.iterrows():
+    # Access the on_time_percentage using the multi-level index
+    percentage_value = row[('on_time_percentage', '')]
+    plt.text(index, percentage_value, f'{percentage_value:.1%}', color='black', ha="center", va="bottom")
+
+plt.tight_layout() # Adjust layout to prevent labels overlapping
+plt.show()
+```
 
 ## Challenge Requirements 📋
 

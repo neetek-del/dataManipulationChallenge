@@ -352,23 +352,25 @@ First few rows of product line data:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Question 1: Data Types and Date Handling</strong> - What is the <code>dtype</code> of the <code>actualShipDate</code> series? How can you find out using code?</p>
+<p><strong>Question 1: Data Types and Date Handling</strong></p>
+<section id="simple-assignment---calculate-if-shipment-was-late" class="level1">
+<h1>Simple assignment - calculate if shipment was late</h1>
+<section id="briefly-give-answers-to-the-discussion-questions-in-this-section" class="level4">
+<h4 class="anchored" data-anchor-id="briefly-give-answers-to-the-discussion-questions-in-this-section">Briefly Give Answers to the Discussion Questions In This Section</h4>
 <ul>
-<li>Answer : The <code>dtype</code> of the <code>actualShipDate</code> series is <code>datetime64[ns]</code>.It represents dates and times with nanosecond precision. We can find out using below code by printing the dtype of the <code>actualShipDate</code> series.</li>
+<li><p>What is the <code>dtype</code> of the <code>actualShipDate</code> series? How can you find out using code?</p></li>
+<li><p>Answer : The <code>dtype</code> of the <code>actualShipDate</code> series is <code>datetime64[ns]</code>.It represents dates and times with nanosecond precision. We can find out using below code by printing the dtype of the <code>actualShipDate</code> series.</p></li>
 </ul>
-<div id="d6b0b1d1" class="cell" data-execution_count="3">
+<div id="91146279" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'actualShipDate'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>datetime64[ns]</code></pre>
 </div>
 </div>
 <ul>
-<li><p>Why is it important that both <code>actualShipDate</code> and <code>plannedShipDate</code> have the same data type for comparison?</p></li>
-<li><p>Answer :</p></li>
+<li>Why is it important that both <code>actualShipDate</code> and <code>plannedShipDate</code> have the same data type for comparison?</li>
 </ul>
-<p>Having the same data type for <code>actualShipDate</code> and <code>plannedShipDate</code> is crucial for accurate comparison. When dates are stored as datetime objects, Python can correctly compare them chronologically. For example, <code>datetime(2025, 11, 4)</code> is correctly identified as later than <code>datetime(2024, 5, 20)</code>. Unlike strings, numerical representations of dates and times inherently support chronological ordering, ensuring comparisons yield correct results.</p>
-<p>However, if dates are stored as strings with different formats (e.g., “04-11-2025” and “05-20-2024”), a simple string comparison might yield unintuitive results. Comparing “04-11-2025” and “05-20-2024” as strings would result in “04-11-2025” being considered “less than” “05-20-2024” because ‘04’ comes before ‘05’ alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.</p>
-<div id="a23902e0" class="cell" data-execution_count="4">
+<div id="19568bd3" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'actualShipDate'</span>].dtype)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'plannedShipDate'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -377,9 +379,14 @@ datetime64[ns]</code></pre>
 </div>
 </div>
 <ul>
+<li>Answer :</li>
+</ul>
+<p>Having the same data type for <code>actualShipDate</code> and <code>plannedShipDate</code> is crucial for accurate comparison. When dates are stored as datetime objects, Python can correctly compare them chronologically. For example, <code>datetime(2025, 11, 4)</code> is correctly identified as later than <code>datetime(2024, 5, 20)</code>. Unlike strings, numerical representations of dates and times inherently support chronological ordering, ensuring comparisons yield correct results.</p>
+<p>However, if dates are stored as strings with different formats (e.g., “04-11-2025” and “05-20-2024”), a simple string comparison might yield unintuitive results. Comparing “04-11-2025” and “05-20-2024” as strings would result in “04-11-2025” being considered “less than” “05-20-2024” because ‘04’ comes before ‘05’ alphabetically. This is incorrect chronologically. Therefore, consistent datetime objects ensure that comparisons reflect the actual temporal order of the dates.</p>
+<ul>
 <li>Answer : We can find out using below code by printing the dtype of the <code>actualShipDate</code> and <code>plannedShipDate</code> series.</li>
 </ul>
-<div id="ad7f3a65" class="cell" data-execution_count="5">
+<div id="1ac0c70f" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'actualShipDate'</span>].dtype)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'plannedShipDate'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -391,7 +398,7 @@ datetime64[ns]</code></pre>
 <ul>
 <li>Answer : Comparing two dates as strings would yield unintuitive results, e.g.&nbsp;what happens if you try to compare “04-11-2025” and “05-20-2024” as strings vs as dates? from datetime import datetime</li>
 </ul>
-<div id="9398d2e7" class="cell" data-execution_count="6">
+<div id="72b4de9b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>date_string1 <span class="op">=</span> <span class="st">"04-11-2025"</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>date_string2 <span class="op">=</span> <span class="st">"05-20-2024"</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -424,12 +431,14 @@ Comparing 2025-04-11 00:00:00 and 2024-05-20 00:00:00 as datetime objects:
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>What’s wrong with the <code>lateStatement</code> assignment and how would you fix it?</p>
+</section>
+</section>
 </div>
 </div>
 <ul>
 <li>Answer : The <code>lateStatement</code> assignment is wrong because the <code>is_late</code> column is a boolean series, not a single boolean value. We need to use the <code>all()</code> method to check if all values in the <code>is_late</code> column are True.</li>
 </ul>
-<div id="9c2e68e7" class="cell" data-execution_count="7">
+<div id="470c09dc" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>shipments_with_lateness <span class="op">=</span> (</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    shipments_df</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    .assign(</span>
@@ -458,14 +467,6 @@ Comparing 2025-04-11 00:00:00 and 2024-05-20 00:00:00 as datetime objects:
 4  Shipment is on Time  </code></pre>
 </div>
 </div>
-</section>
-</section>
-</section>
-<section id="simple-assignment---calculate-if-shipment-was-late" class="level1">
-<h1>Simple assignment - calculate if shipment was late</h1>
-<section id="briefly-give-answers-to-the-discussion-questions-in-this-section" class="level4">
-<h4 class="anchored" data-anchor-id="briefly-give-answers-to-the-discussion-questions-in-this-section">Briefly Give Answers to the Discussion Questions In This Section</h4>
-<p>Adam’s answers will be here.</p>
 </section>
 <section id="subset-querying-rows-and-filtering-columns" class="level3">
 <h3 class="anchored" data-anchor-id="subset-querying-rows-and-filtering-columns">2. Subset: Querying Rows and Filtering Columns</h3>
@@ -511,7 +512,7 @@ Late shipments sample:
 </ul>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout callout-style-default callout-important callout-empty-content callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -521,11 +522,16 @@ Late shipments sample:
 </div>
 </div>
 <div class="callout-body-container callout-body">
+
+</div>
+</div>
+<section id="briefly-give-answers-to-the-discussion-questions-in-this-section-1" class="level4">
+<h4 class="anchored" data-anchor-id="briefly-give-answers-to-the-discussion-questions-in-this-section-1">Briefly Give Answers to the Discussion Questions In This Section</h4>
 <p><strong>Question 1: Query vs Boolean Indexing</strong> - What’s the difference between using <code>.query('is_late == True')</code> and <code>[df['is_late'] == True]</code>?</p>
 <ul>
 <li>Answer : The difference between using <code>.query('is_late == True')</code> and <code>[df['is_late'] == True]</code> is that <code>.query()</code> is a more readable way to query rows based on conditions. It is more readable because it is a more natural way to express the condition.</li>
 </ul>
-<div id="1154d3e2" class="cell" data-execution_count="9">
+<div id="25c43209" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_with_lateness.query(<span class="st">'is_late == True'</span>))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_with_lateness[shipments_with_lateness[<span class="st">'is_late'</span>] <span class="op">==</span> <span class="va">True</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -590,7 +596,7 @@ Late shipments sample:
 <li><p>Answer : The approach that is more readable is <code>.query('is_late == True')</code> because it is a more natural way to express the condition.</p></li>
 </ul>
 <p><strong>Question 2: Additional Row Querying</strong> - Can you show an example of using a variable like <code>late_threshold</code> to query rows for shipments that are at least <code>late_threshold</code> days late, e.g.&nbsp;what if you wanted to query rows for shipments that are at least 5 days late?</p>
-<div id="68f14a04" class="cell" data-execution_count="10">
+<div id="81a8e0f9" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a late threshold</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>late_threshold <span class="op">=</span> <span class="dv">5</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -609,13 +615,6 @@ Late shipments sample:
 780   10192      2013-10-09     2013-10-14          5  Darn Shipment is Late</code></pre>
 </div>
 </div>
-</div>
-</div>
-<section id="briefly-give-answers-to-the-discussion-questions-in-this-section-1" class="level4">
-<h4 class="anchored" data-anchor-id="briefly-give-answers-to-the-discussion-questions-in-this-section-1">Briefly Give Answers to the Discussion Questions In This Section</h4>
-<blockquote class="blockquote">
-<p>Replace this with your answers to the discussion questions</p>
-</blockquote>
 </section>
 </section>
 <section id="drop-removing-unwanted-data" class="level3">
@@ -651,7 +650,7 @@ Remaining columns: ['shipID', 'plannedShipDate', 'actualShipDate', 'partID', 'is
 <ul>
 <li>Answer : The difference between <code>.drop(columns=['quantity'])</code> and <code>.filter()</code> with a list of columns you want to keep is that <code>.drop(columns=['quantity'])</code> drops the <code>quantity</code> column from the dataframe, while <code>.filter()</code> keeps the <code>quantity</code> column in the dataframe.</li>
 </ul>
-<div id="9802f22f" class="cell" data-execution_count="12">
+<div id="1ca3a4e6" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_shipments.columns.tolist())</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_shipments.<span class="bu">filter</span>([<span class="st">'shipID'</span>, <span class="st">'partID'</span>, <span class="st">'plannedShipDate'</span>, <span class="st">'actualShipDate'</span>, <span class="st">'days_late'</span>]).columns.tolist())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -667,7 +666,7 @@ Remaining columns: ['shipID', 'plannedShipDate', 'actualShipDate', 'partID', 'is
 <p>When dropna() is called without the subset argument, it examines every cell in each row of the DataFrame. If any cell in a row contains a missing value, the entire row is removed from the DataFrame. This is the default behavior and can be a quick way to remove any incomplete data, but it can also lead to substantial data loss if missing values are present in columns that are not critical to the specific analysis being performed.</p>
 <p>.dropna() without specifying subset: This is like saying, “If any cell in a row is empty, get rid of the whole row.” This can remove a lot of rows, even if only one cell in a row is empty and the other information in that row is useful. .dropna(subset=[‘plannedShipDate’, ‘actualShipDate’]): This is like saying, “Only get rid of a row if a cell in the ‘plannedShipDate’ column or the ‘actualShipDate’ column is empty.” If cells in other columns are empty, but these two date columns are filled, the row is kept.</p>
 <p>Code Example:</p>
-<div id="416cb30a" class="cell" data-execution_count="13">
+<div id="691a1d7c" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -768,7 +767,7 @@ DataFrame after dropna() with subset=['col2', 'col3']:
 </section>
 <section id="sample" class="level3">
 <h3 class="anchored" data-anchor-id="sample">Sample</h3>
-<div id="8ff64781" class="cell" data-execution_count="15">
+<div id="490a3c0b" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example 1: Sorting by days_late in ascending order</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sorting by days_late (ascending):"</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>sorted_ascending <span class="op">=</span> shipments_with_lateness.sort_values(by<span class="op">=</span><span class="st">'days_late'</span>, ascending<span class="op">=</span><span class="va">True</span>)</span>
@@ -998,6 +997,7 @@ SpareParts      True   767  137  0.179    -1.003  21</code></pre>
 <blockquote class="blockquote">
 <p>Replace this with your answers to the discussion questions</p>
 </blockquote>
+</section>
 </section>
 </section>
 <section id="answering-a-business-question" class="level2">
